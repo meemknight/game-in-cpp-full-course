@@ -22,7 +22,7 @@ GameplayData data;
 
 gl2d::Renderer2D renderer;
 
-constexpr int BACKGROUNDS = 3;
+constexpr int BACKGROUNDS = 4;
 
 gl2d::Texture spaceShipTexture;
 
@@ -39,14 +39,17 @@ bool initGame()
 	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
 	backgroundTexture[1].loadFromFile(RESOURCES_PATH "background2.png", true);
 	backgroundTexture[2].loadFromFile(RESOURCES_PATH "background3.png", true);
+	backgroundTexture[3].loadFromFile(RESOURCES_PATH "background4.png", true);
 
 	tiledRenderer[0].texture = backgroundTexture[0];
 	tiledRenderer[1].texture = backgroundTexture[1];
 	tiledRenderer[2].texture = backgroundTexture[2];
+	tiledRenderer[3].texture = backgroundTexture[3];
 
 	tiledRenderer[0].paralaxStrength = 0;
-	tiledRenderer[1].paralaxStrength = 0.4;
-	tiledRenderer[2].paralaxStrength = 0.7;
+	tiledRenderer[1].paralaxStrength = 0.2;
+	tiledRenderer[2].paralaxStrength = 0.4;
+	tiledRenderer[3].paralaxStrength = 0.7;
 
 	return true;
 }
@@ -73,6 +76,7 @@ bool gameLogic(float deltaTime)
 	renderer.currentCamera.follow(data.playerPos, deltaTime * 1450, 1, 50, w, h);
 
 #pragma endregion
+
 
 #pragma region movement
 
