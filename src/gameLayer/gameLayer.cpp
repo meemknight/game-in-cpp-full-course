@@ -12,6 +12,13 @@
 #include <platformTools.h>
 
 
+struct GameplayData
+{
+	glm::vec2 playerPos = {100,100};
+};
+
+
+GameplayData data;
 
 gl2d::Renderer2D renderer;
 
@@ -44,9 +51,50 @@ bool gameLogic(float deltaTime)
 	renderer.updateWindowMetrics(w, h);
 #pragma endregion
 
+#pragma region movement
+
+	glm::vec2 move = {};
+
+	if (
+		platform::isButtonHeld(platform::Button::W) ||
+		platform::isButtonHeld(platform::Button::Up)
+		)
+	{
+		move.y = -1;
+	}
+	if (
+		platform::isButtonHeld(platform::Button::S) ||
+		platform::isButtonHeld(platform::Button::Down)
+		)
+	{
+		move.y = 1;
+	}
+	if (
+		platform::isButtonHeld(platform::Button::A) ||
+		platform::isButtonHeld(platform::Button::Left)
+		)
+	{
+		move.x = -1;
+	}
+	if (
+		platform::isButtonHeld(platform::Button::D) ||
+		platform::isButtonHeld(platform::Button::Right)
+		)
+	{
+		move.x = 1;
+	}
+
+	if (move.x != 0 || move.y != 0)
+	{
+		move = glm::normalize(move);
+		move *= deltaTime * 200; //200 pixels per seccond
+		data.playerPos += move;
+	}
+
+#pragma endregion
 
 
-	renderer.renderRectangle({100,100, 200, 200}, spaceShipTexture);
+	renderer.renderRectangle({data.playerPos, 200, 200}, spaceShipTexture);
 
 
 	renderer.flush();
