@@ -43,7 +43,11 @@ bool initGame()
 	tiledRenderer[0].texture = backgroundTexture[0];
 	tiledRenderer[1].texture = backgroundTexture[1];
 	tiledRenderer[2].texture = backgroundTexture[2];
-	
+
+	tiledRenderer[0].paralaxStrength = 0;
+	tiledRenderer[1].paralaxStrength = 0.4;
+	tiledRenderer[2].paralaxStrength = 0.7;
+
 	return true;
 }
 
@@ -98,7 +102,7 @@ bool gameLogic(float deltaTime)
 	if (move.x != 0 || move.y != 0)
 	{
 		move = glm::normalize(move);
-		move *= deltaTime * 1000; //500 pixels per seccond
+		move *= deltaTime * 2000; //500 pixels per seccond
 		data.playerPos += move;
 	}
 
