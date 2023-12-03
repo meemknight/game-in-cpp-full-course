@@ -156,7 +156,10 @@ bool gameLogic(float deltaTime)
 
 #pragma region render ship
 
-	renderer.renderRectangle({data.playerPos, 250, 250}, spaceShipTexture,
+	constexpr float shipSize = 250.f;
+
+	renderer.renderRectangle({data.playerPos - glm::vec2(shipSize/2,shipSize/2)
+		, shipSize,shipSize}, spaceShipTexture,
 		Colors_White, {}, glm::degrees(spaceShipAngle) + 90.f);
 
 #pragma endregion
