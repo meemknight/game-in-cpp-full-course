@@ -55,6 +55,7 @@ bool initGame()
 
 bool gameLogic(float deltaTime)
 {
+
 #pragma region init stuff
 	int w = 0; int h = 0;
 	w = platform::getFrameBufferSizeX(); //window w
@@ -64,6 +65,13 @@ bool gameLogic(float deltaTime)
 	glClear(GL_COLOR_BUFFER_BIT); //clear screen
 
 	renderer.updateWindowMetrics(w, h);
+#pragma endregion
+
+
+#pragma region follow
+
+	renderer.currentCamera.follow(data.playerPos, deltaTime * 1450, 1, 50, w, h);
+
 #pragma endregion
 
 #pragma region movement
@@ -108,6 +116,7 @@ bool gameLogic(float deltaTime)
 
 #pragma endregion
 
+
 #pragma region render background
 
 	renderer.currentCamera.zoom = 0.5;
@@ -120,9 +129,34 @@ bool gameLogic(float deltaTime)
 #pragma endregion
 
 
-	renderer.currentCamera.follow(data.playerPos, deltaTime * 450, 10, 50, w, h);
+#pragma region mouse pos
 
-	renderer.renderRectangle({data.playerPos, 200, 200}, spaceShipTexture);
+	glm::vec2 mousePos = platform::getRelMousePosition();
+	glm::vec2 screenCenter(w / 2.f, h / 2.f);
+
+	glm::vec2 mouseDirection = mousePos - screenCenter;
+
+	if (glm::length(mouseDirection) == 0.f)
+	{
+		mouseDirection = {1,0};
+	}
+	else
+	{
+		mouseDirection = normalize(mouseDirection);
+	}
+
+	float spaceShipAngle = atan2(mouseDirection.y, -mouseDirection.x);
+
+#pragma endregion
+
+
+#pragma region render ship
+
+	renderer.renderRectangle({data.playerPos, 250, 250}, spaceShipTexture,
+		Colors_White, {}, glm::degrees(spaceShipAngle) + 90.f);
+
+#pragma endregion
+
 
 
 	renderer.flush();
