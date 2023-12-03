@@ -8,8 +8,6 @@ void TiledRenderer::render(gl2d::Renderer2D &renderer)
 	auto viewRect = renderer.getViewRect();
 	//this allows us to see what we can see
 
-
-
 	for (int y = -1; y <= 1; y++)
 	{
 		for (int x = -1; x <= 1; x++)

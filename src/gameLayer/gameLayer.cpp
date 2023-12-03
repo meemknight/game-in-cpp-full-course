@@ -22,10 +22,12 @@ GameplayData data;
 
 gl2d::Renderer2D renderer;
 
-gl2d::Texture spaceShipTexture;
-gl2d::Texture backgroundTexture;
+constexpr int BACKGROUNDS = 3;
 
-TiledRenderer tiledRenderer;
+gl2d::Texture spaceShipTexture;
+
+gl2d::Texture backgroundTexture[BACKGROUNDS];
+TiledRenderer tiledRenderer[BACKGROUNDS];
 
 bool initGame()
 {
@@ -34,9 +36,13 @@ bool initGame()
 	renderer.create();
 
 	spaceShipTexture.loadFromFile(RESOURCES_PATH "spaceShip/ships/green.png", true);
-	backgroundTexture.loadFromFile(RESOURCES_PATH "background1.png", true);
+	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
+	backgroundTexture[1].loadFromFile(RESOURCES_PATH "background2.png", true);
+	backgroundTexture[2].loadFromFile(RESOURCES_PATH "background3.png", true);
 
-	tiledRenderer.texture = backgroundTexture;
+	tiledRenderer[0].texture = backgroundTexture[0];
+	tiledRenderer[1].texture = backgroundTexture[1];
+	tiledRenderer[2].texture = backgroundTexture[2];
 	
 	return true;
 }
@@ -102,7 +108,10 @@ bool gameLogic(float deltaTime)
 
 	renderer.currentCamera.zoom = 0.5;
 
-	tiledRenderer.render(renderer);
+	for (int i = 0; i < BACKGROUNDS; i++)
+	{
+		tiledRenderer[i].render(renderer);
+	}
 
 #pragma endregion
 
