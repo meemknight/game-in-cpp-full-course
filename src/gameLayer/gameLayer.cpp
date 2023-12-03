@@ -10,7 +10,7 @@
 #include "imfilebrowser.h"
 #include <gl2d/gl2d.h>
 #include <platformTools.h>
-
+#include <tiledRenderer.h>
 
 struct GameplayData
 {
@@ -25,6 +25,8 @@ gl2d::Renderer2D renderer;
 gl2d::Texture spaceShipTexture;
 gl2d::Texture backgroundTexture;
 
+TiledRenderer tiledRenderer;
+
 bool initGame()
 {
 	//initializing stuff for the renderer
@@ -34,6 +36,7 @@ bool initGame()
 	spaceShipTexture.loadFromFile(RESOURCES_PATH "spaceShip/ships/green.png", true);
 	backgroundTexture.loadFromFile(RESOURCES_PATH "background1.png", true);
 
+	tiledRenderer.texture = backgroundTexture;
 	
 	return true;
 }
@@ -89,7 +92,7 @@ bool gameLogic(float deltaTime)
 	if (move.x != 0 || move.y != 0)
 	{
 		move = glm::normalize(move);
-		move *= deltaTime * 500; //500 pixels per seccond
+		move *= deltaTime * 1000; //500 pixels per seccond
 		data.playerPos += move;
 	}
 
@@ -97,9 +100,9 @@ bool gameLogic(float deltaTime)
 
 #pragma region render background
 
+	renderer.currentCamera.zoom = 0.5;
 
-
-	renderer.renderRectangle({0, 0, 10000, 10000}, backgroundTexture);
+	tiledRenderer.render(renderer);
 
 #pragma endregion
 
