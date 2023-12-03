@@ -23,6 +23,7 @@ GameplayData data;
 gl2d::Renderer2D renderer;
 
 gl2d::Texture spaceShipTexture;
+gl2d::Texture backgroundTexture;
 
 bool initGame()
 {
@@ -31,6 +32,7 @@ bool initGame()
 	renderer.create();
 
 	spaceShipTexture.loadFromFile(RESOURCES_PATH "spaceShip/ships/green.png", true);
+	backgroundTexture.loadFromFile(RESOURCES_PATH "background1.png", true);
 
 	
 	return true;
@@ -87,12 +89,22 @@ bool gameLogic(float deltaTime)
 	if (move.x != 0 || move.y != 0)
 	{
 		move = glm::normalize(move);
-		move *= deltaTime * 200; //200 pixels per seccond
+		move *= deltaTime * 500; //500 pixels per seccond
 		data.playerPos += move;
 	}
 
 #pragma endregion
 
+#pragma region render background
+
+
+
+	renderer.renderRectangle({0, 0, 10000, 10000}, backgroundTexture);
+
+#pragma endregion
+
+
+	renderer.currentCamera.follow(data.playerPos, deltaTime * 450, 10, 50, w, h);
 
 	renderer.renderRectangle({data.playerPos, 200, 200}, spaceShipTexture);
 
