@@ -59,6 +59,7 @@ bool initGame()
 }
 
 
+constexpr float shipSize = 250.f;
 
 bool gameLogic(float deltaTime)
 {
@@ -74,12 +75,6 @@ bool gameLogic(float deltaTime)
 	renderer.updateWindowMetrics(w, h);
 #pragma endregion
 
-
-#pragma region follow
-
-	renderer.currentCamera.follow(data.playerPos, deltaTime * 1450, 1, 50, w, h);
-
-#pragma endregion
 
 
 #pragma region movement
@@ -124,6 +119,12 @@ bool gameLogic(float deltaTime)
 
 #pragma endregion
 
+#pragma region follow
+
+	renderer.currentCamera.follow(data.playerPos
+		, deltaTime * 550, 1, 150, w, h);
+
+#pragma endregion
 
 #pragma region render background
 
@@ -131,9 +132,9 @@ bool gameLogic(float deltaTime)
 
 	for (int i = 0; i < BACKGROUNDS; i++)
 	{
-		tiledRenderer[i].render(renderer);
+	//	tiledRenderer[i].render(renderer);
 	}
-
+	tiledRenderer[0].render(renderer);
 #pragma endregion
 
 
@@ -159,8 +160,6 @@ bool gameLogic(float deltaTime)
 
 
 #pragma region render ship
-
-	constexpr float shipSize = 250.f;
 
 	renderer.renderRectangle({data.playerPos - glm::vec2(shipSize/2,shipSize/2)
 		, shipSize,shipSize}, spaceShipsTexture,
