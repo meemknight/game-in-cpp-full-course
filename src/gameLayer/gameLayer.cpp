@@ -24,7 +24,8 @@ gl2d::Renderer2D renderer;
 
 constexpr int BACKGROUNDS = 4;
 
-gl2d::Texture spaceShipTexture;
+gl2d::Texture spaceShipsTexture;
+gl2d::TextureAtlasPadding spaceShipsAtlas;
 
 gl2d::Texture backgroundTexture[BACKGROUNDS];
 TiledRenderer tiledRenderer[BACKGROUNDS];
@@ -35,7 +36,10 @@ bool initGame()
 	gl2d::init();
 	renderer.create();
 
-	spaceShipTexture.loadFromFile(RESOURCES_PATH "spaceShip/ships/green.png", true);
+	spaceShipsTexture.loadFromFileWithPixelPadding
+	(RESOURCES_PATH "spaceShip/stitchedFiles/spaceships.png", 128, true);
+	spaceShipsAtlas = gl2d::TextureAtlasPadding(5, 2, spaceShipsTexture.GetSize().x, spaceShipsTexture.GetSize().y);
+
 	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
 	backgroundTexture[1].loadFromFile(RESOURCES_PATH "background2.png", true);
 	backgroundTexture[2].loadFromFile(RESOURCES_PATH "background3.png", true);
@@ -159,8 +163,9 @@ bool gameLogic(float deltaTime)
 	constexpr float shipSize = 250.f;
 
 	renderer.renderRectangle({data.playerPos - glm::vec2(shipSize/2,shipSize/2)
-		, shipSize,shipSize}, spaceShipTexture,
-		Colors_White, {}, glm::degrees(spaceShipAngle) + 90.f);
+		, shipSize,shipSize}, spaceShipsTexture,
+		Colors_White, {}, glm::degrees(spaceShipAngle) + 90.f, 
+		spaceShipsAtlas.get(1,0));
 
 #pragma endregion
 
