@@ -49,6 +49,11 @@ gl2d::Texture healthBar;
 gl2d::Texture health;
 
 
+bool intersectBullet(glm::vec2 bulletPos, glm::vec2 shipPos, float shipSize)
+{
+	return glm::distance(bulletPos, shipPos) <= shipSize;
+}
+
 void restartGame()
 {
 	data = {};
@@ -170,9 +175,9 @@ bool gameLogic(float deltaTime)
 
 	for (int i = 0; i < BACKGROUNDS; i++)
 	{
-	//	tiledRenderer[i].render(renderer);
+		tiledRenderer[i].render(renderer);
 	}
-	tiledRenderer[0].render(renderer);
+	//tiledRenderer[0].render(renderer);
 #pragma endregion
 
 
@@ -220,8 +225,63 @@ bool gameLogic(float deltaTime)
 			continue;
 		}
 
+		if (!data.bullets[i].isEnemy)
+		{
+			bool breakBothLoops = false;
+			for (int e = 0; e < data.enemies.size(); e++)
+			{
+
+				if (intersectBullet(data.bullets[i].position, data.enemies[e].position,
+					enemyShipSize))
+				{
+					data.enemies[e].life -= 0.1;
+
+					if (data.enemies[e].life <= 0)
+					{
+						//kill enemy
+						data.enemies.erase(data.enemies.begin() + e);
+					}
+
+					data.bullets.erase(data.bullets.begin() + i);
+					i--;
+					breakBothLoops = true;
+					continue;
+				}
+
+			}
+
+			if (breakBothLoops)
+			{
+				continue;
+			}
+		}
+		else
+		{
+			if (intersectBullet(data.bullets[i].position, data.playerPos,
+				shipSize))
+			{
+				data.health -= 0.1;
+
+				data.bullets.erase(data.bullets.begin() + i);
+				i--;
+				continue;
+			}
+
+		}
+
 		data.bullets[i].update(deltaTime);
 
+	}
+
+	if (data.health <= 0)
+	{
+		//kill player
+		restartGame();
+	}
+	else
+	{
+		data.health += deltaTime * 0.01;
+		data.health = glm::clamp(data.health, 0.f, 1.f);
 	}
 
 #pragma endregion
@@ -244,6 +304,7 @@ bool gameLogic(float deltaTime)
 			Bullet b;
 			b.position = data.enemies[i].position;
 			b.fireDirection = data.enemies[i].viewDirection;
+			b.isEnemy = true;
 			//todo speed
 			data.bullets.push_back(b);
 		}

@@ -19,6 +19,8 @@ struct Enemy
 	float fireRange = 1.5;
 	float bulletSpeed = 2000;
 
+	float life = 1.f;
+
 	void render(gl2d::Renderer2D &renderer, gl2d::Texture &sprites,
 		gl2d::TextureAtlasPadding &atlas);
 

@@ -10,8 +10,15 @@ void Bullet::render(gl2d::Renderer2D &renderer,
 	float spaceShipAngle = atan2(fireDirection.y, -fireDirection.x);
 	spaceShipAngle = glm::degrees(spaceShipAngle) + 90.f;
 
-	renderer.renderRectangle({position - glm::vec2(25,25), 50,50},
-		bulletsTexture, Colors_White, {}, spaceShipAngle, bulletsAtlas.get(1, 1));
+	glm::vec4 textureCoords = bulletsAtlas.get(1, 1);
+
+	if (isEnemy)
+	{
+		textureCoords = bulletsAtlas.get(0, 0);
+	}
+
+	renderer.renderRectangle({position - glm::vec2(50,50), 100,100},
+		bulletsTexture, Colors_White, {}, spaceShipAngle, textureCoords);
 }
 
 void Bullet::update(float deltaTime)
