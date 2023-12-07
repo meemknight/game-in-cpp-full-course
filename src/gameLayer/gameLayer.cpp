@@ -15,6 +15,7 @@
 #include <vector>
 #include <enemy.h>
 #include <cstdio>
+#include <glui/glui.h>
 
 struct GameplayData
 {
@@ -23,6 +24,8 @@ struct GameplayData
 	std::vector<Bullet> bullets;
 
 	std::vector<Enemy> enemies;
+
+	float health = 1.f;
 };
 
 
@@ -40,6 +43,10 @@ gl2d::TextureAtlasPadding bulletsAtlas;
 
 gl2d::Texture backgroundTexture[BACKGROUNDS];
 TiledRenderer tiledRenderer[BACKGROUNDS];
+
+
+gl2d::Texture healthBar;
+gl2d::Texture health;
 
 
 void restartGame()
@@ -65,6 +72,8 @@ bool initGame()
 	(RESOURCES_PATH "spaceShip/stitchedFiles/projectiles.png", 500, true);
 	bulletsAtlas = gl2d::TextureAtlasPadding(3, 2, bulletsTexture.GetSize().x, bulletsTexture.GetSize().y);
 
+	healthBar.loadFromFile(RESOURCES_PATH "healthBar.png", true);
+	health.loadFromFile(RESOURCES_PATH "health.png", true);
 
 
 	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
@@ -268,6 +277,34 @@ bool gameLogic(float deltaTime)
 #pragma endregion
 
 
+#pragma region ui
+
+	renderer.pushCamera();
+	{
+
+		glui::Frame f({0,0, w, h});
+
+		glui::Box healthBox = glui::Box().xLeftPerc(0.65).yTopPerc(0.1).
+			xDimensionPercentage(0.3).yAspectRatio(1.f/8.f);
+
+		renderer.renderRectangle(healthBox, healthBar);
+
+		glm::vec4 newRect = healthBox();
+		newRect.z *= data.health;
+
+		glm::vec4 textCoords = {0,1,1,0};
+		textCoords.z *= data.health;
+
+		renderer.renderRectangle(newRect, health, Colors_White, {}, {}, 
+			textCoords);
+
+	}
+	renderer.popCamera();
+
+#pragma endregion
+
+
+
 
 	renderer.flush();
 	
@@ -302,6 +339,8 @@ bool gameLogic(float deltaTime)
 	{
 		restartGame();
 	}
+
+	ImGui::SliderFloat("Player Health", &data.health, 0, 1);
 
 	ImGui::End();
 
