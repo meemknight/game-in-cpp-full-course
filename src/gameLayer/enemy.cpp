@@ -10,8 +10,8 @@ void Enemy::render(gl2d::Renderer2D &renderer,
 }
 
 
-
-void Enemy::update(float deltaTime, glm::vec2 playerPos)
+//returns true if should shoot bullet
+bool Enemy::update(float deltaTime, glm::vec2 playerPos)
 {
 
 	glm::vec2 directionToPlayer = playerPos - position;
@@ -20,9 +20,36 @@ void Enemy::update(float deltaTime, glm::vec2 playerPos)
 
 	glm::vec2 newDirection = {};
 
-	if (glm::length(directionToPlayer + viewDirection) <= 0.1)
+	bool shoot = (glm::length(directionToPlayer + viewDirection) >= fireRange);
+
+	if (shoot)
 	{
-		newDirection = glm::vec2(directionToPlayer.y, -directionToPlayer.x);
+		if (firedTime <= 0.f)
+		{
+			//we can shoot
+			firedTime = fireTimeReset;
+		}
+		else
+		{
+			shoot = 0;
+		}
+	}
+
+	firedTime -= deltaTime;
+	if (firedTime < 0) { firedTime = 0.f; }
+
+
+	if (glm::length(directionToPlayer + viewDirection) <= 0.2)
+	{
+		if (rand() % 2)
+		{
+			newDirection = glm::vec2(directionToPlayer.y, -directionToPlayer.x);
+		}
+		else
+		{
+			newDirection = glm::vec2(-directionToPlayer.y, directionToPlayer.x);
+		}
+
 	}
 	else
 	{
@@ -30,8 +57,12 @@ void Enemy::update(float deltaTime, glm::vec2 playerPos)
 			deltaTime * turnSpeed * directionToPlayer + viewDirection;
 	}
 
-
+	float length = glm::length(newDirection);
 	viewDirection = glm::normalize(newDirection);
-	position += viewDirection * deltaTime * speed;
+	
+	length = glm::clamp(length, 0.1f, 3.f);
 
+	position += viewDirection * deltaTime * speed * length;
+
+	return shoot;
 }
