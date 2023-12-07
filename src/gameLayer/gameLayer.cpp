@@ -14,6 +14,7 @@
 #include <bullet.h>
 #include <vector>
 #include <enemy.h>
+#include <cstdio>
 
 struct GameplayData
 {
@@ -42,6 +43,8 @@ TiledRenderer tiledRenderer[BACKGROUNDS];
 
 bool initGame()
 {
+	std::srand(std::time(0));
+
 	//initializing stuff for the renderer
 	gl2d::init();
 	renderer.create();
@@ -208,7 +211,7 @@ bool gameLogic(float deltaTime)
 
 	for (int i = 0; i < data.enemies.size(); i++)
 	{
-		//todo update enemies
+		data.enemies[i].update(deltaTime, data.playerPos);
 	}
 
 #pragma endregion
@@ -252,8 +255,16 @@ bool gameLogic(float deltaTime)
 
 	if (ImGui::Button("Spawn enemy"))
 	{
+
+		glm::uvec2 shipTypes[] = {{0,0}, {0,1}, {2,0}, {3, 1}};
+
 		Enemy e;
 		e.position = data.playerPos;
+
+		e.speed = 700 + rand() % 1000;
+		e.turnSpeed = 2.f + (rand() & 1000) / 500.f;
+		e.type = shipTypes[rand() % 4];
+
 		data.enemies.push_back(e);
 	}
 
