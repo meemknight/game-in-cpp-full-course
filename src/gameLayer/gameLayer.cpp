@@ -16,6 +16,7 @@
 #include <enemy.h>
 #include <cstdio>
 #include <glui/glui.h>
+#include <raudio.h>
 
 struct GameplayData
 {
@@ -50,6 +51,7 @@ TiledRenderer tiledRenderer[BACKGROUNDS];
 gl2d::Texture healthBar;
 gl2d::Texture health;
 
+Sound shootSound;
 
 bool intersectBullet(glm::vec2 bulletPos, glm::vec2 shipPos, float shipSize)
 {
@@ -82,6 +84,8 @@ bool initGame()
 	healthBar.loadFromFile(RESOURCES_PATH "healthBar.png", true);
 	health.loadFromFile(RESOURCES_PATH "health.png", true);
 
+	shootSound = LoadSound(RESOURCES_PATH "shoot.flac");
+	SetSoundVolume(shootSound, 0.1);
 
 	backgroundTexture[0].loadFromFile(RESOURCES_PATH "background1.png", true);
 	backgroundTexture[1].loadFromFile(RESOURCES_PATH "background2.png", true);
@@ -236,6 +240,9 @@ bool gameLogic(float deltaTime)
 		b.fireDirection = mouseDirection;
 
 		data.bullets.push_back(b);
+
+		PlaySound(shootSound);
+
 	}
 
 
@@ -304,7 +311,7 @@ bool gameLogic(float deltaTime)
 	}
 	else
 	{
-		data.health += deltaTime * 0.01;
+		data.health += deltaTime * 0.05;
 		data.health = glm::clamp(data.health, 0.f, 1.f);
 	}
 
@@ -348,9 +355,13 @@ bool gameLogic(float deltaTime)
 			Bullet b;
 			b.position = data.enemies[i].position;
 			b.fireDirection = data.enemies[i].viewDirection;
+			b.speed = data.enemies[i].bulletSpeed;
+
 			b.isEnemy = true;
-			//todo speed
 			data.bullets.push_back(b);
+
+			if (!IsSoundPlaying(shootSound)) PlaySound(shootSound);
+
 		}
 	}
 

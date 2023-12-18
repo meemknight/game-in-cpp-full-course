@@ -368,7 +368,7 @@ int main()
 #pragma endregion
 
 #pragma region audio
-	//InitAudioDevice();
+	InitAudioDevice();
 
 	//Music m = LoadMusicStream(RESOURCES_PATH "target.ogg");
 	//Music m = {};
