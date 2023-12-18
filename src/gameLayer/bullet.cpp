@@ -24,6 +24,6 @@ void Bullet::render(gl2d::Renderer2D &renderer,
 void Bullet::update(float deltaTime)
 {
 
-	position += fireDirection * deltaTime * 3000.f;
+	position += fireDirection * deltaTime * speed;
 
 }

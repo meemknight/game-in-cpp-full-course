@@ -26,6 +26,8 @@ struct GameplayData
 	std::vector<Enemy> enemies;
 
 	float health = 1.f;
+
+	float spawnEnemyTimerSecconds = 3;
 };
 
 
@@ -103,6 +105,28 @@ bool initGame()
 
 
 constexpr float shipSize = 250.f;
+
+void spanwEnemy() 
+{
+	glm::uvec2 shipTypes[] = {{0,0}, {0,1}, {2,0}, {3, 1}};
+
+	Enemy e;
+	e.position = data.playerPos;
+
+	glm::vec2 offset(2000, 0);
+	offset = glm::vec2(  glm::vec4(offset,0,1) * glm::rotate(glm::mat4(1.f), glm::radians((float)(rand()%360)), glm::vec3(0,0, 1))  );
+
+	e.position += offset;
+
+	e.speed = 800 + rand() % 1000;
+	e.turnSpeed = 2.2f + (rand() & 1000) / 500.f;
+	e.type = shipTypes[rand() % 4];
+	e.fireRange = 1.5 + (rand() % 1000) / 2000.f;
+	e.fireTimeReset = 0.1 + (rand() % 1000) / 500;
+	e.bulletSpeed = rand() % 3000 + 1000;
+
+	data.enemies.push_back(e);
+}
 
 bool gameLogic(float deltaTime)
 {
@@ -288,6 +312,26 @@ bool gameLogic(float deltaTime)
 
 #pragma region handle enemies
 
+	if (data.enemies.size() < 15) 
+	{
+		data.spawnEnemyTimerSecconds -= deltaTime;
+
+		if (data.spawnEnemyTimerSecconds < 0)
+		{
+			data.spawnEnemyTimerSecconds = rand() % 6 + 1;
+
+			spanwEnemy();
+			if (rand() % 3 == 0)
+			{
+				spanwEnemy();
+				spanwEnemy();
+			}
+
+		}
+	
+	}
+
+
 	for (int i = 0; i < data.enemies.size(); i++)
 	{
 
@@ -379,21 +423,7 @@ bool gameLogic(float deltaTime)
 
 	if (ImGui::Button("Spawn enemy"))
 	{
-
-		glm::uvec2 shipTypes[] = {{0,0}, {0,1}, {2,0}, {3, 1}};
-
-		Enemy e;
-		e.position = data.playerPos;
-
-		e.speed = 800 + rand() % 1000;
-		e.turnSpeed = 2.2f + (rand() & 1000) / 500.f;
-		e.type = shipTypes[rand() % 4];
-		e.fireRange = 1.5 + (rand() % 1000) / 2000.f;
-		e.fireTimeReset = 0.1 + (rand() % 1000) / 500;
-		
-		//todo bullet speed
-
-		data.enemies.push_back(e);
+		spanwEnemy();
 	}
 
 	if (ImGui::Button("Reset game"))
