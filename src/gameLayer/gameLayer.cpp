@@ -4,10 +4,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include "platformInput.h"
-#include "imgui.h"
+//#include "imgui.h"
 #include <iostream>
 #include <sstream>
-#include "imfilebrowser.h"
+//#include "imfilebrowser.h"
 #include <gl2d/gl2d.h>
 #include <platformTools.h>
 #include <tiledRenderer.h>
@@ -421,30 +421,29 @@ bool gameLogic(float deltaTime)
 
 
 
-
 	renderer.flush();
 	
 
 	//ImGui::ShowDemoWindow();
 
-	ImGui::Begin("debug");
-
-	ImGui::Text("Bullets count: %d", (int)data.bullets.size());
-	ImGui::Text("Enemies count: %d", (int)data.enemies.size());
-
-	if (ImGui::Button("Spawn enemy"))
-	{
-		spanwEnemy();
-	}
-
-	if (ImGui::Button("Reset game"))
-	{
-		restartGame();
-	}
-
-	ImGui::SliderFloat("Player Health", &data.health, 0, 1);
-
-	ImGui::End();
+	//ImGui::Begin("debug");
+	//
+	//ImGui::Text("Bullets count: %d", (int)data.bullets.size());
+	//ImGui::Text("Enemies count: %d", (int)data.enemies.size());
+	//
+	//if (ImGui::Button("Spawn enemy"))
+	//{
+	//	spanwEnemy();
+	//}
+	//
+	//if (ImGui::Button("Reset game"))
+	//{
+	//	restartGame();
+	//}
+	//
+	//ImGui::SliderFloat("Player Health", &data.health, 0, 1);
+	//
+	//ImGui::End();
 
 
 	return true;
