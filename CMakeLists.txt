@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 #set this to true to ship the game!
 #! ! ! ! ! ! !
 #DELETE THE OUT FOLDER AFTER CHANGING THIS BECAUSE VISUAL STUDIO DOESN'T SEEM TO RECOGNIZE THIS CHANGE AND REBUILD!
-option(PRODUCTION_BUILD "Make this a production build" ON)
+option(PRODUCTION_BUILD "Make this a production build" OFF)
 #DELETE THE OUT FOLDER AFTER CHANGING THIS BECAUSE VISUAL STUDIO DOESN'T SEEM TO RECOGNIZE THIS CHANGE AND REBUILD!
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -68,7 +68,7 @@ else()
 
 endif()
 
-target_sources("${CMAKE_PROJECT_NAME}" PRIVATE ${MY_SOURCES})
+target_sources("${CMAKE_PROJECT_NAME}" PRIVATE ${MY_SOURCES} "app.rc")
 
 
 if(MSVC) # If using the VS compiler...

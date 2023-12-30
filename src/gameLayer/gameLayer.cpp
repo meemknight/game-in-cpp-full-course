@@ -67,6 +67,10 @@ void restartGame()
 
 bool initGame()
 {
+
+
+
+
 	std::srand(std::time(0));
 
 	//initializing stuff for the renderer
@@ -110,7 +114,7 @@ bool initGame()
 
 constexpr float shipSize = 250.f;
 
-void spanwEnemy() 
+void spawnEnemy() 
 {
 	glm::uvec2 shipTypes[] = {{0,0}, {0,1}, {2,0}, {3, 1}};
 
@@ -123,7 +127,7 @@ void spanwEnemy()
 	e.position += offset;
 
 	e.speed = 800 + rand() % 1000;
-	e.turnSpeed = 2.2f + (rand() & 1000) / 500.f;
+	e.turnSpeed = 2.2f + (rand() % 1000) / 500.f;
 	e.type = shipTypes[rand() % 4];
 	e.fireRange = 1.5 + (rand() % 1000) / 2000.f;
 	e.fireTimeReset = 0.1 + (rand() % 1000) / 500;
@@ -327,11 +331,11 @@ bool gameLogic(float deltaTime)
 		{
 			data.spawnEnemyTimerSecconds = rand() % 6 + 1;
 
-			spanwEnemy();
+			spawnEnemy();
 			if (rand() % 3 == 0)
 			{
-				spanwEnemy();
-				spanwEnemy();
+				spawnEnemy();
+				spawnEnemy();
 			}
 
 		}
@@ -433,7 +437,7 @@ bool gameLogic(float deltaTime)
 	//
 	//if (ImGui::Button("Spawn enemy"))
 	//{
-	//	spanwEnemy();
+	//	spawnEnemy();
 	//}
 	//
 	//if (ImGui::Button("Reset game"))
@@ -454,7 +458,6 @@ bool gameLogic(float deltaTime)
 //This function might not be be called if the program is forced closed
 void closeGame()
 {
-
 
 
 }
