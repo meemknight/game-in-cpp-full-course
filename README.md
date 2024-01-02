@@ -2,7 +2,7 @@
   
 ## This is the repo for my full game in C++ course.
 
-## The YouTube video will be out soon.
+## [YouTube video](https://youtu.be/XOs2qynEmNE).
 
 ![demo](https://github.com/meemknight/game-in-cpp-full-course/assets/36445656/bfa8bb4e-5c18-49c1-b078-81ba27561096)
 
