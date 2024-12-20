@@ -15,6 +15,7 @@
 #include <vector>
 #include <enemy.h>
 #include <cstdio>
+#include <ctime>
 #include <glui/glui.h>
 #include <raudio.h>
 
