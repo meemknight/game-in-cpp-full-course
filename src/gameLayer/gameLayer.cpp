@@ -266,7 +266,6 @@ bool gameLogic(float deltaTime)
 			bool breakBothLoops = false;
 			for (int e = 0; e < data.enemies.size(); e++)
 			{
-
 				if (intersectBullet(data.bullets[i].position, data.enemies[e].position,
 					enemyShipSize))
 				{
@@ -281,7 +280,8 @@ bool gameLogic(float deltaTime)
 					data.bullets.erase(data.bullets.begin() + i);
 					i--;
 					breakBothLoops = true;
-					continue;
+
+					break;
 				}
 
 			}
